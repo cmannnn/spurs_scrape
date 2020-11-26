@@ -16,13 +16,20 @@ title_f2 = title_f1.find(id='meta')
 
 title_p = title_f2.find(itemprop='name').get_text().strip()
 
+
+# most goals
+most_goals = title_f2.find('Most Goals')
+
 # most goals (but not efficient)
 #most_goals_f2 = title_f2.p.nextSibling.nextSibling.nextSibling.get_text()
+
+title_f2.prettify()
+print(most_goals)
+
 
 
 # print block
 #print(
-	# title_p,
-	# most_goals_f2
-
+	#title_p,
+	#most_goals_f2)
 
