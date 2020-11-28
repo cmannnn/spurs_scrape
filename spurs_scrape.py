@@ -1,35 +1,31 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+import pandas as pd
 
 # Premier League Stats
-page = requests.get('https://fbref.com/en/comps/9/Premier-League-Stats')
+html_text = requests.get('https://fbref.com/en/comps/9/Premier-League-Stats').text
+soup = BeautifulSoup(html_text, 'lxml')
 
-# making soup
-soup = BeautifulSoup(page.content, 'html.parser')
+# players stats - most goals
+player_goals = soup.find('div', id='wrap')
+player_goals2 = player_goals.find('div', id='info')
+player_goals3 = player_goals2.find('div', id='meta')
+player_goals4 = player_goals3.find_all('div')[1]
+player_goals5 = player_goals4.find_all('p')[3].text
 
-site = soup.find(class_='fb') 
+# players stats - most assists
+player_assists = player_goals4.find_all('p')[4].text
 
-title_f1 = site.find(id='wrap')
+# player stats - most clean sheets
+player_clean_sheets = player_goals4.find_all('p')[5].text
 
-title_f2 = title_f1.find(id='meta')
+#print(f'{player_goals5}')
+#print(f'{player_assists}')
+#print(f'{player_clean_sheets}')
 
-title_p = title_f2.find(itemprop='name').get_text().strip()
+# current league table
+current_league_table = pd.read_html('https://fbref.com/en/comps/9/Premier-League-Stats')[0]
+current_league_table = current_league_table.set_index('Rk')
+current_league_table = current_league_table.drop(['Notes', 'Attendance'], axis=1)
 
-
-# most goals
-most_goals = title_f2.find('Most Goals')
-
-# most goals (but not efficient)
-#most_goals_f2 = title_f2.p.nextSibling.nextSibling.nextSibling.get_text()
-
-title_f2.prettify()
-print(most_goals)
-
-
-
-# print block
-#print(
-	#title_p,
-	#most_goals_f2)
-
+print(current_league_table.info())
