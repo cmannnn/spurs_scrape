@@ -28,4 +28,9 @@ current_league_table = pd.read_html('https://fbref.com/en/comps/9/Premier-League
 current_league_table = current_league_table.set_index('Rk')
 current_league_table = current_league_table.drop(['Notes', 'Attendance'], axis=1)
 
-print(current_league_table.info())
+#print(current_league_table.info())
+
+# squad stats NOT PULLING SECOND TABLE IN CORRECTLY
+squad_stats_table = pd.read_html('https://fbref.com/en/comps/9/Premier-League-Stats', header=1)[1]
+
+print(squad_stats_table.info())
