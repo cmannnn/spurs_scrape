@@ -31,8 +31,19 @@ current_league_table = current_league_table.drop(columns=['Notes', 'Attendance']
 
 #print(current_league_table.info())
 
-# squad stats NOT PULLING SECOND TABLE IN CORRECTLY
-squad_stats_table = pd.read_html('https://fbref.com/en/comps/9/Premier-League-Stats', header=1)[1]
+
+squad_stats_table = pd.read_html('https://fbref.com/en/comps/9/Premier-League-Stats')
+
 
 # cleaning column names
 #squad_stats_table = squad_stats_table.rename(columns={'Rk': 'Rank', 'MP': 'Matches Played'})
+
+# squad stats NOT PULLING SECOND TABLE IN CORRECTLY
+def get_tables(input):
+	tables = BeautifulSoup(input, 'lxml').find_all(['table', 'h1'])
+	formatted = pd.DataFrame(pd.read_html(str(tables))).prettify()
+	return formatted
+
+print(get_tables(html_text))
+
+
